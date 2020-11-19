@@ -4,7 +4,7 @@ let milktea;
 //factor
 let yoff = 0;
 //coefficient
-let c = 150;
+let c = 300;
 //side stroke offset
 let strOff = 150;
 
@@ -12,6 +12,8 @@ let strOff = 150;
 function setup() {
     //canvas size is same as window width and height.
     let canvas = createCanvas(windowWidth, windowHeight);
+    
+    canvas.style('z-index', '-1');
     
     //frame rate set to 30.
     frameRate(30);
