@@ -48,9 +48,21 @@ let Boba = function(m, x, y) {
     this.position = createVector(x,y);
     this.velocity = createVector(0, 0);
     this.acc = createVector(0,0);
-    this.velocity
 }
 
+//apply velocity when falling.
+Boba.prototype.applyForce = function(f) {
+    let force = p5.Vector.div(f, this.mass);
+    this.acc.add(f);
+}
+
+
+/*
+Boba.prototype.checkSubmerged = function() {
+    if(this.position.y > )
+}
+*/
+//display boba
 Boba.prototype.display = function() {
     noStroke();
     fill('#3f1c00');
