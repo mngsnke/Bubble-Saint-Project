@@ -8,6 +8,8 @@ let c = 300;
 //side stroke offset
 let strOff = 150;
 
+let boba = [];
+
 
 function setup() {
     //canvas size is same as window width and height.
@@ -16,13 +18,18 @@ function setup() {
     canvas.style('z-index', '-1');
     
     //frame rate set to 30.
-    frameRate(30);
+    frameRate(144);
     
     //canvas position lcoked
     canvas.position(0, 0, 'fixed');
     
     //milktea initialization
     milktea = new MilkTea(-100, 0, yoff, c, strOff);
+    
+    for(var i = 0; i < 10; i++) {
+        boba[i] = new Boba(3, random(0, windowWidth), random(-150, -100));
+    }
+    
 }
 
 
@@ -33,11 +40,24 @@ function draw() {
     
     noStroke();
     fill('#3f1c00');
-    ellipse(400, 500, 40, 40);
     
-    let mover = new Boba(3, 40, 40);
     
-    mover.display();
+    for(var x = 0; x < boba.length; x++) {
+        let gravity = createVector(0, 0.1 * boba[x].mass);
+        
+        if(boba[x].position.y >= windowHeight - boba[x].mass * 16) {
+            boba[x].velocity.y *= -0.9;
+            
+        } else {
+            boba[x].applyForce(gravity);
+            boba[x].update();
+        }
+        
+        boba[x].display();
+        
+    }
+    
+    
     
 }
 
@@ -51,8 +71,8 @@ let Boba = function(m, x, y) {
 }
 
 //apply velocity when falling.
-Boba.prototype.applyForce = function(f) {
-    let force = p5.Vector.div(f, this.mass);
+Boba.prototype.applyForce = function(force) {
+    let f = p5.Vector.div(force, this.mass);
     this.acc.add(f);
 }
 
@@ -68,6 +88,15 @@ Boba.prototype.display = function() {
     fill('#3f1c00');
     ellipse(this.position.x, this.position.y, this.mass * 16, this.mass * 16);
 }
+
+Boba.prototype.update = function() {
+  // Velocity changes according to acceleration
+  this.velocity.add(this.acc);
+  // position changes by velocity
+  this.position.add(this.velocity);
+  // We must clear acceleration each frame
+  this.acc.mult(0);
+};
 
 //MilkTea Class
 let MilkTea = function(x, y, f, c, ss) {
